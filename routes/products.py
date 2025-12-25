@@ -266,6 +266,40 @@ def view_product(product_id):
 
     return render_template('view_product.html', product=product, error=None, user=user_info)
 
+@products_bp.route('/test-ai')
+@utils.login_required
+def test_ai():
+    """Test OpenAI API connection"""
+    if not config.OPENAI_API_KEY:
+        return {
+            'status': 'error',
+            'message': 'OpenAI API key chưa được cấu hình'
+        }
+    
+    try:
+        import openai
+        openai.api_key = config.OPENAI_API_KEY
+        
+        response = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": "Xin chào, bạn có thể phân tích nông nghiệp không?"}
+            ],
+            max_tokens=50
+        )
+        
+        return {
+            'status': 'success',
+            'message': 'OpenAI API hoạt động bình thường',
+            'response': response.choices[0].message.content
+        }
+    except Exception as e:
+        return {
+            'status': 'error',
+            'message': f'Lỗi kết nối OpenAI: {str(e)}'
+        }
+
+
 @products_bp.route('/ai-report/<product_id>')
 @utils.login_required
 def ai_report(product_id):

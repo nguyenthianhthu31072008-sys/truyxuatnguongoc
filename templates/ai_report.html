@@ -456,10 +456,195 @@
                         </div>
                     </div>
                     
-                    <!-- Phân tích mùa vụ và năng suất -->
+                    <!-- Phân tích AI từ OpenAI -->
+                    {% if analysis.ai_insights %}
+                    <div class="section">
+                        <div class="section-title">
+                            🤖 PHÂN TÍCH AI CHUYÊN SÂU
+                            {% if analysis.ai_insights.transparency_score %}
+                            <span class="score-badge">{{ analysis.ai_insights.transparency_score }}/100 điểm AI</span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Đánh giá tuân thủ số hóa từ AI -->
+                        {% if analysis.ai_insights.digitization_compliance %}
+                        <div class="ai-compliance-section" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
+                            <h4 style="color: #667eea; margin-bottom: 1rem;">📊 Tuân thủ tiêu chuẩn số hóa (AI)</h4>
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <span class="compliance-badge {% if analysis.ai_insights.digitization_compliance.level == 'Xuất sắc' %}excellent{% elif analysis.ai_insights.digitization_compliance.level == 'Tốt' %}good{% elif analysis.ai_insights.digitization_compliance.level == 'Trung bình' %}average{% else %}needs-improvement{% endif %}">
+                                    {{ analysis.ai_insights.digitization_compliance.level }} ({{ analysis.ai_insights.digitization_compliance.score }}/100)
+                                </span>
+                            </div>
+                            {% if analysis.ai_insights.digitization_compliance.missing_elements %}
+                            <div style="margin-top: 1rem;">
+                                <strong style="color: #ff9800;">Các yếu tố cần bổ sung:</strong>
+                                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                    {% for element in analysis.ai_insights.digitization_compliance.missing_elements %}
+                                    <li style="margin-bottom: 0.25rem;">{{ element }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Phân tích thị trường từ AI -->
+                        {% if analysis.ai_insights.market_analysis %}
+                        <div class="ai-market-section" style="background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(33, 150, 243, 0.05) 100%); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
+                            <h4 style="color: #2196f3; margin-bottom: 1rem;">💼 Phân tích thị trường (AI)</h4>
+                            <div class="market-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                                {% if analysis.ai_insights.market_analysis.current_market_trend %}
+                                <div class="market-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #2196f3;">
+                                    <strong style="color: #2196f3;">Xu hướng thị trường</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_insights.market_analysis.current_market_trend }}</p>
+                                </div>
+                                {% endif %}
+                                {% if analysis.ai_insights.market_analysis.price_prediction %}
+                                <div class="market-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #4caf50;">
+                                    <strong style="color: #4caf50;">Dự đoán giá cả</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_insights.market_analysis.price_prediction }}</p>
+                                </div>
+                                {% endif %}
+                                {% if analysis.ai_insights.market_analysis.target_customers %}
+                                <div class="market-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #ff9800;">
+                                    <strong style="color: #ff9800;">Khách hàng mục tiêu</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_insights.market_analysis.target_customers }}</p>
+                                </div>
+                                {% endif %}
+                                {% if analysis.ai_insights.market_analysis.distribution_channels %}
+                                <div class="market-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #9c27b0;">
+                                    <strong style="color: #9c27b0;">Kênh phân phối</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_insights.market_analysis.distribution_channels }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Đánh giá chất lượng từ AI -->
+                        {% if analysis.ai_insights.quality_assessment %}
+                        <div class="ai-quality-section" style="background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
+                            <h4 style="color: #4caf50; margin-bottom: 1rem;">✅ Đánh giá chất lượng (AI)</h4>
+                            <div class="quality-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                {% if analysis.ai_insights.quality_assessment.production_quality %}
+                                <div class="quality-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #4caf50;">
+                                    <strong style="color: #4caf50;">Chất lượng sản xuất</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_insights.quality_assessment.production_quality }}</p>
+                                </div>
+                                {% endif %}
+                                {% if analysis.ai_insights.quality_assessment.traceability_level %}
+                                <div class="quality-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #2196f3;">
+                                    <strong style="color: #2196f3;">Mức độ truy xuất</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_insights.quality_assessment.traceability_level }}</p>
+                                </div>
+                                {% endif %}
+                                {% if analysis.ai_insights.quality_assessment.safety_compliance %}
+                                <div class="quality-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #ff9800;">
+                                    <strong style="color: #ff9800;">An toàn thực phẩm</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_insights.quality_assessment.safety_compliance }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Gợi ý chứng nhận -->
+                        {% if analysis.ai_insights.certification_recommendations %}
+                        <div class="ai-cert-section" style="background: linear-gradient(135deg, rgba(156, 39, 176, 0.1) 0%, rgba(156, 39, 176, 0.05) 100%); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
+                            <h4 style="color: #9c27b0; margin-bottom: 1rem;">🏆 Đề xuất chứng nhận</h4>
+                            <div style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #9c27b0;">
+                                {% if analysis.ai_insights.certification_recommendations is string %}
+                                <p>{{ analysis.ai_insights.certification_recommendations }}</p>
+                                {% else %}
+                                <ul style="padding-left: 1.5rem;">
+                                    {% for cert in analysis.ai_insights.certification_recommendations %}
+                                    <li style="margin-bottom: 0.5rem;">{{ cert }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Gợi ý marketing số -->
+                        {% if analysis.ai_insights.digital_marketing_tips %}
+                        <div class="ai-marketing-section" style="background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 152, 0, 0.05) 100%); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
+                            <h4 style="color: #ff9800; margin-bottom: 1rem;">📱 Gợi ý Marketing số</h4>
+                            <div style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #ff9800;">
+                                {% if analysis.ai_insights.digital_marketing_tips is string %}
+                                <p>{{ analysis.ai_insights.digital_marketing_tips }}</p>
+                                {% else %}
+                                <ul style="padding-left: 1.5rem;">
+                                    {% for tip in analysis.ai_insights.digital_marketing_tips %}
+                                    <li style="margin-bottom: 0.5rem;">{{ tip }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Gợi ý cải thiện từ AI -->
+                        {% if analysis.ai_insights.improvement_suggestions %}
+                        <div class="ai-suggestions-section" style="background: linear-gradient(135deg, rgba(244, 67, 54, 0.1) 0%, rgba(244, 67, 54, 0.05) 100%); padding: 1.5rem; border-radius: 15px;">
+                            <h4 style="color: #f44336; margin-bottom: 1rem;">💡 Gợi ý cải thiện từ AI</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                {% for suggestion in analysis.ai_insights.improvement_suggestions %}
+                                <li style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #f44336; margin-bottom: 0.75rem; line-height: 1.6;">
+                                    {{ suggestion }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Phân tích mùa vụ từ AI -->
+                    {% if analysis.ai_seasonal_insights %}
+                    <div class="section">
+                        <div class="section-title">🌱 PHÂN TÍCH MÙA VỤ VÀ THỜI TIẾT (AI)</div>
+                        <div class="ai-seasonal-section" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); padding: 1.5rem; border-radius: 15px;">
+                            <div class="seasonal-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                                {% if analysis.ai_seasonal_insights.season_analysis %}
+                                <div class="seasonal-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #667eea;">
+                                    <strong style="color: #667eea;">Phân tích mùa vụ</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_seasonal_insights.season_analysis }}</p>
+                                </div>
+                                {% endif %}
+                                {% if analysis.ai_seasonal_insights.weather_impact %}
+                                <div class="seasonal-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #2196f3;">
+                                    <strong style="color: #2196f3;">Tác động thời tiết</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_seasonal_insights.weather_impact }}</p>
+                                </div>
+                                {% endif %}
+                                {% if analysis.ai_seasonal_insights.optimal_timing %}
+                                <div class="seasonal-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #4caf50;">
+                                    <strong style="color: #4caf50;">Thời điểm tối ưu</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_seasonal_insights.optimal_timing }}</p>
+                                </div>
+                                {% endif %}
+                                {% if analysis.ai_seasonal_insights.yield_prediction %}
+                                <div class="seasonal-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #ff9800;">
+                                    <strong style="color: #ff9800;">Dự đoán năng suất</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_seasonal_insights.yield_prediction }}</p>
+                                </div>
+                                {% endif %}
+                                {% if analysis.ai_seasonal_insights.climate_recommendations %}
+                                <div class="seasonal-item" style="background: white; padding: 1rem; border-radius: 10px; border-left: 4px solid #9c27b0;">
+                                    <strong style="color: #9c27b0;">Khuyến nghị khí hậu</strong>
+                                    <p style="margin-top: 0.5rem;">{{ analysis.ai_seasonal_insights.climate_recommendations }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Phân tích mùa vụ cơ bản -->
                     {% if analysis.season_analysis %}
                     <div class="section">
-                        <div class="section-title">📅 PHÂN TÍCH MÙA VỤ VÀ NĂNG SUẤT</div>
+                        <div class="section-title">📅 PHÂN TÍCH MÙA VỤ CƠ BẢN</div>
                         <div class="season-analysis">
                             <div class="season-grid">
                                 {% if analysis.season_analysis.season %}
