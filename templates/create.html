@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo sản phẩm mới - Truy xuất Nguồn gốc</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="{{ url_for('main.index') }}" class="navbar-brand">🌱 Truy xuất Nguồn gốc</a>
+            <div class="navbar-actions">
+                {% if user %}
+                    <span style="color: var(--primary-color); font-weight: 600;">👤 {{ user.full_name }}</span>
+                    <a href="{{ url_for('products.manage') }}" class="btn btn-secondary btn-small">Quản lý</a>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-small">Đăng xuất</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>➕ Tạo sản phẩm mới</h1>
+            <p class="subtitle">Tạo mã QR truy xuất nguồn gốc cho sản phẩm</p>
+        </header>
+        
+        <main>
+            {% if error %}
+                <div class="error-message">{{ error }}</div>
+            {% endif %}
+            
+            <form method="POST" enctype="multipart/form-data" class="product-form">
+                <div class="form-section">
+                    <h3>📋 Thông tin cơ bản</h3>
+                    
+                    <div class="form-group">
+                        <label for="product_name">Tên sản phẩm: *</label>
+                        <input type="text" id="product_name" name="product_name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="plant_type">Loại cây trồng:</label>
+                        <select id="plant_type" name="plant_type">
+                            <option value="seasonal">Cây thời vụ</option>
+                            <option value="perennial">Cây lâu năm</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="production_area">Khu vực sản xuất:</label>
+                        <input type="text" id="production_area" name="production_area">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>📅 Thời gian</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="planting_date">Ngày gieo trồng:</label>
+                            <input type="date" id="planting_date" name="planting_date">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="harvest_date">Ngày thu hoạch:</label>
+                            <input type="date" id="harvest_date" name="harvest_date">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>🔄 Quy trình</h3>
+                    
+                    <div class="form-group">
+                        <label for="production_process">Quy trình sản xuất:</label>
+                        <textarea id="production_process" name="production_process" rows="4" placeholder="Mô tả chi tiết quy trình sản xuất..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="harvest_process">Quy trình thu hoạch:</label>
+                        <textarea id="harvest_process" name="harvest_process" rows="4" placeholder="Mô tả chi tiết quy trình thu hoạch..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="storage_method">Phương pháp bảo quản:</label>
+                        <textarea id="storage_method" name="storage_method" rows="3" placeholder="Mô tả cách bảo quản sản phẩm..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>📸 Hình ảnh/Video</h3>
+                    
+                    <div class="form-group">
+                        <label for="production_files">Media quá trình sản xuất:</label>
+                        <input type="file" id="production_files" name="production_files" multiple accept="image/*,video/*">
+                        <small>Chọn nhiều file hình ảnh hoặc video</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="harvest_files">Media quá trình thu hoạch:</label>
+                        <input type="file" id="harvest_files" name="harvest_files" multiple accept="image/*,video/*">
+                        <small>Chọn nhiều file hình ảnh hoặc video</small>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large">✅ Tạo sản phẩm</button>
+                    <a href="{{ url_for('products.manage') }}" class="btn btn-secondary">❌ Hủy</a>
+                </div>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

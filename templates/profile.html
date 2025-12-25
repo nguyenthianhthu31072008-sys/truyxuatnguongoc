@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin cá nhân - Truy xuất Nguồn gốc</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="{{ url_for('main.index') }}" class="navbar-brand">🌱 Truy xuất Nguồn gốc</a>
+            <div class="navbar-actions">
+                {% if user %}
+                    <span style="color: var(--primary-color); font-weight: 600;">👤 {{ user.full_name }}</span>
+                    <a href="{{ url_for('products.manage') }}" class="btn btn-secondary btn-small">Quản lý</a>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-small">Đăng xuất</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <h1>👤 Thông tin cá nhân</h1>
+        </header>
+        
+        <main>
+            {% if user %}
+            <div class="profile-card">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Tên đăng nhập</div>
+                        <div class="info-value">{{ user.username }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Họ và tên</div>
+                        <div class="info-value">{{ user.full_name }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Số điện thoại</div>
+                        <div class="info-value">{{ user.phone or 'Chưa cập nhật' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">{{ user.email or 'Chưa cập nhật' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Địa chỉ</div>
+                        <div class="info-value">{{ user.address or 'Chưa cập nhật' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Ngày tham gia</div>
+                        <div class="info-value">{{ user.created_at or 'N/A' }}</div>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <a href="{{ url_for('products.manage') }}" class="btn btn-primary">Quản lý sản phẩm</a>
+                    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Về trang chủ</a>
+                </div>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>
