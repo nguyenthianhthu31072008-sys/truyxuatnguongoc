@@ -147,7 +147,7 @@
                                         <small class="text-muted">{{ product.get('created_at', 'N/A') }}</small>
                                     </td>
                                     <td>
-                                        <a href="{{ url_for('main.view_product', product_id=product.id) }}" 
+                                        <a href="{{ url_for('products.product', product_id=product.id) }}" 
                                            class="btn btn-sm btn-outline-primary" target="_blank" title="Xem sản phẩm">
                                             <i class="fas fa-eye"></i>
                                         </a>
