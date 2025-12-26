@@ -64,6 +64,7 @@ def load_users():
                     'username': 'admin',
                     'password': hash_password('admin123'),  # Mật khẩu: admin123
                     'full_name': 'Quản trị viên',
+                    'role': 'admin',
                     'created_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 }
             ]
