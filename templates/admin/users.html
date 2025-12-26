@@ -1,0 +1,120 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Quản lý Users{% endblock %}
+{% block page_title %}Quản lý Users{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <p class="text-muted mb-0">Quản lý tài khoản người dùng trong hệ thống</p>
+    </div>
+    <a href="{{ url_for('admin.create_user') }}" class="btn btn-success">
+        <i class="fas fa-user-plus"></i> Tạo người dùng mới
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if users %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tên đăng nhập</th>
+                            <th>Họ tên</th>
+                            <th>Vai trò</th>
+                            <th>Ngày tạo</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>
+                                <strong>{{ user.username }}</strong>
+                                {% if user.username == session.user %}
+                                    <span class="badge bg-primary ms-2">Bạn</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ user.full_name }}</td>
+                            <td>
+                                {% if user.get('role') == 'admin' %}
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-user-shield"></i> Admin
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">
+                                        <i class="fas fa-user"></i> User
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>{{ user.get('created_at', 'N/A') }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('admin.edit_user', username=user.username) }}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    {% if user.username != session.user %}
+                                        <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                onclick="confirmDelete('{{ user.username }}', '{{ user.full_name }}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-users fa-3x mb-3"></i>
+                <h5>Chưa có người dùng nào</h5>
+                <p>Hãy tạo người dùng đầu tiên</p>
+                <a href="{{ url_for('admin.create_user') }}" class="btn btn-success">
+                    <i class="fas fa-user-plus"></i> Tạo người dùng
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa người dùng <strong id="deleteUserName"></strong>?</p>
+                <p class="text-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Hành động này không thể hoàn tác!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Xóa
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function confirmDelete(username, fullName) {
+    document.getElementById('deleteUserName').textContent = fullName + ' (' + username + ')';
+    document.getElementById('deleteForm').action = '/admin/users/' + username + '/delete';
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
+{% endblock %}

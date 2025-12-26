@@ -1,120 +1,169 @@
 # Hệ thống Truy xuất Nguồn gốc Nông sản
 
-Ứng dụng Flask để quản lý và truy xuất nguồn gốc nông sản thông qua mã QR với tính năng phân tích AI.
+Ứng dụng web Flask để quản lý và truy xuất nguồn gốc nông sản với mã QR.
 
 ## Tính năng
 
-- 🔐 Đăng ký/Đăng nhập người dùng
-- 📦 Tạo và quản lý sản phẩm nông sản
-- 📱 Tạo mã QR cho từng sản phẩm
-- 📸 Upload hình ảnh quá trình sản xuất và thu hoạch
-- 🔍 Tìm kiếm sản phẩm
-- 🤖 **Phân tích AI với OpenAI** (Mới)
-  - Đánh giá tính minh bạch
-  - Phân tích tuân thủ tiêu chuẩn số hóa
-  - Gợi ý thị trường và giá cả
-  - Đánh giá chất lượng sản phẩm
-  - Phân tích mùa vụ và thời tiết
-  - Gợi ý cải thiện và chứng nhận
-  - Khuyến nghị marketing số
+- ✅ Đăng ký/Đăng nhập người dùng
+- ✅ Tạo và quản lý sản phẩm nông sản
+- ✅ Tạo mã QR cho từng sản phẩm
+- ✅ Upload hình ảnh/video sản xuất và thu hoạch
+- ✅ Phân tích AI cho báo cáo sản phẩm
+- ✅ **Admin Panel** - Quản lý người dùng và hệ thống
+- ✅ Responsive design
+
+## Admin Panel
+
+### Tính năng Admin:
+- 📊 Dashboard với thống kê tổng quan
+- 👥 Quản lý người dùng (tạo, sửa, xóa)
+- 📦 Quản lý tất cả sản phẩm
+- 🔧 Thông tin hệ thống
+- 🛡️ Phân quyền admin/user
+
+### Tài khoản Admin mặc định:
+- **Username:** `admin`
+- **Password:** `admin123`
+
+> ⚠️ **Quan trọng:** Hãy đổi mật khẩu admin ngay sau khi deploy!
 
 ## Deploy lên Railway
 
-### Bước 1: Chuẩn bị GitHub Repository
-
-1. Tạo repository mới trên GitHub: `leminhvu950/truyxuatnguongoc`
-2. Clone repository về máy hoặc push code hiện tại lên
-
-### Bước 2: Deploy lên Railway
-
-1. Truy cập [railway.app](https://railway.app)
-2. Đăng nhập bằng GitHub
-3. Click "New Project" → "Deploy from GitHub repo"
-4. Chọn repository `leminhvu950/truyxuatnguongoc`
-5. Railway sẽ tự động detect Flask app và deploy
-
-### Bước 3: Cấu hình OpenAI API (Bắt buộc cho tính năng AI)
-
-Trong Railway dashboard > Settings > Environment Variables:
-
-```
-OPENAI_API_KEY=your_openai_api_key_here
-OPENAI_MODEL=gpt-3.5-turbo
-OPENAI_MAX_TOKENS=1500
-OPENAI_TEMPERATURE=0.7
-```
-
-**Lấy OpenAI API Key:**
-1. Truy cập [platform.openai.com](https://platform.openai.com/api-keys)
-2. Đăng nhập/Đăng ký tài khoản OpenAI
-3. Tạo API key mới
-4. Copy và paste vào Railway environment variables
-
-### Bước 4: Cấu hình Environment Variables khác (Tùy chọn)
-
-- `SECRET_KEY`: Railway sẽ tự động generate
-
-## Chạy Local
-
-### Cài đặt dependencies
+### 1. Chuẩn bị
 ```bash
+# Clone repository
+git clone <your-repo-url>
+cd khkt
+
+# Cài đặt dependencies (optional - để test local)
 pip install -r requirements.txt
 ```
 
-### Cấu hình OpenAI (Tùy chọn)
-Tạo file `.env` từ `.env.example`:
-```bash
-cp .env.example .env
-```
+### 2. Deploy trên Railway
 
-Chỉnh sửa `.env` và thêm OpenAI API key:
-```
-OPENAI_API_KEY=your_openai_api_key_here
-```
+1. **Tạo tài khoản Railway:**
+   - Truy cập [railway.app](https://railway.app)
+   - Đăng ký/Đăng nhập
 
-### Chạy ứng dụng
-```bash
-python app.py
-```
+2. **Tạo project mới:**
+   - Click "New Project"
+   - Chọn "Deploy from GitHub repo"
+   - Kết nối với repository của bạn
 
-## Sử dụng tính năng AI
+3. **Cấu hình biến môi trường:**
+   - Vào Settings > Variables
+   - Thêm các biến sau:
+   ```
+   SECRET_KEY=your-super-secret-key-here-make-it-long-and-random
+   FLASK_ENV=production
+   ```
 
-1. Đăng nhập vào hệ thống
-2. Tạo hoặc chọn sản phẩm cần phân tích
-3. Click "🤖 Tạo báo cáo truy xuất AI"
-4. Xem báo cáo chi tiết với:
-   - Điểm minh bạch từ AI
-   - Phân tích tuân thủ tiêu chuẩn số hóa
-   - Gợi ý thị trường và giá cả
-   - Đánh giá chất lượng
-   - Phân tích mùa vụ
-   - Gợi ý cải thiện cụ thể
+4. **Deploy:**
+   - Railway sẽ tự động detect Flask app
+   - Build và deploy sẽ diễn ra tự động
+   - Ứng dụng sẽ có URL dạng: `https://your-app.railway.app`
 
-## Chi phí OpenAI API
+### 3. Sau khi deploy
 
-- GPT-3.5-turbo: ~$0.002/1K tokens
-- Mỗi báo cáo AI: ~$0.01-0.03
-- Có thể giới hạn số lần gọi API để kiểm soát chi phí
+1. **Đổi mật khẩu admin:**
+   - Truy cập `/admin`
+   - Đăng nhập với `admin/admin123`
+   - Vào "Quản lý Users" > Edit admin > Đổi mật khẩu
+
+2. **Tạo user mới:**
+   - Sử dụng Admin Panel để tạo user
+   - Hoặc cho phép user tự đăng ký
 
 ## Cấu trúc Project
 
 ```
+khkt/
 ├── app.py              # Main Flask application
-├── config.py           # Configuration (bao gồm OpenAI config)
+├── config.py           # Configuration
 ├── utils.py            # Utility functions
-├── ai_analysis.py      # AI analysis module (OpenAI integration)
-├── routes/             # Route blueprints
-├── templates/          # HTML templates
-│   └── ai_report.html  # Template báo cáo AI
-├── static/             # Static files (CSS, uploads, QR codes)
-├── data/               # JSON database files
-├── requirements.txt    # Python dependencies (bao gồm openai)
-├── railway.toml        # Railway configuration
-├── Procfile           # Process configuration
-├── .env.example       # Environment variables template
-└── DEPLOY_GUIDE.md    # Hướng dẫn deploy chi tiết
+├── requirements.txt    # Python dependencies
+├── Procfile           # Railway deployment config
+├── railway.json       # Railway settings
+├── runtime.txt        # Python version
+├── routes/            # Route blueprints
+│   ├── main.py        # Main routes
+│   ├── auth.py        # Authentication
+│   ├── products.py    # Product management
+│   └── admin.py       # Admin panel
+├── templates/         # HTML templates
+│   ├── admin/         # Admin templates
+│   └── ...
+├── static/            # Static files
+│   ├── style.css
+│   ├── qrcodes/       # Generated QR codes
+│   └── uploads/       # User uploads
+└── data/              # JSON data files
+    ├── data.json      # Products data
+    └── users.json     # Users data
 ```
 
-## Test API Connection
+## API Endpoints
 
-Truy cập `/test-ai` để kiểm tra kết nối OpenAI API (cần đăng nhập).
+### Public
+- `GET /` - Trang chủ
+- `GET /product/<id>` - Xem sản phẩm
+
+### Authentication
+- `GET/POST /login` - Đăng nhập
+- `GET/POST /register` - Đăng ký
+- `GET /logout` - Đăng xuất
+
+### Products (User)
+- `GET/POST /create` - Tạo sản phẩm
+- `GET /manage` - Quản lý sản phẩm của user
+- `GET/POST /edit/<id>` - Chỉnh sửa sản phẩm
+
+### Admin Panel
+- `GET /admin/` - Dashboard
+- `GET /admin/users` - Quản lý users
+- `GET/POST /admin/users/create` - Tạo user
+- `GET/POST /admin/users/<username>/edit` - Sửa user
+- `POST /admin/users/<username>/delete` - Xóa user
+- `GET /admin/products` - Quản lý sản phẩm
+- `POST /admin/products/<id>/delete` - Xóa sản phẩm
+- `GET /admin/system` - Thông tin hệ thống
+
+## Bảo mật
+
+- ✅ CSRF Protection
+- ✅ Password hashing với bcrypt
+- ✅ Session management
+- ✅ File upload validation
+- ✅ Admin role-based access control
+
+## Môi trường Development
+
+```bash
+# Cài đặt dependencies
+pip install -r requirements.txt
+
+# Chạy development server
+python app.py
+
+# Truy cập: http://localhost:5000
+```
+
+## Troubleshooting
+
+### Lỗi thường gặp:
+
+1. **"No module named 'bcrypt'"**
+   ```bash
+   pip install bcrypt
+   ```
+
+2. **"Permission denied" khi upload file**
+   - Kiểm tra quyền thư mục `static/uploads/`
+
+3. **Admin không thể truy cập**
+   - Kiểm tra role trong `data/users.json`
+   - Đảm bảo user có `"role": "admin"`
+
+## License
+
+MIT License - Xem file LICENSE để biết thêm chi tiết.

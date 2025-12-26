@@ -1,0 +1,100 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Tạo người dùng{% endblock %}
+{% block page_title %}Tạo người dùng mới{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-user-plus"></i> Thông tin người dùng mới
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Tên đăng nhập *</label>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   required maxlength="50" pattern="[a-zA-Z0-9_]+" 
+                                   title="Chỉ được sử dụng chữ cái, số và dấu gạch dưới">
+                            <div class="form-text">Chỉ được sử dụng chữ cái, số và dấu gạch dưới</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="full_name" class="form-label">Họ và tên *</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" 
+                                   required maxlength="100">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Mật khẩu *</label>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   required minlength="6">
+                            <div class="form-text">Tối thiểu 6 ký tự</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="role" class="form-label">Vai trò</label>
+                            <select class="form-select" id="role" name="role">
+                                <option value="user">User thường</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Lưu ý:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>Admin có thể quản lý toàn bộ hệ thống</li>
+                            <li>User thường chỉ có thể tạo và quản lý sản phẩm của mình</li>
+                            <li>Tên đăng nhập không thể thay đổi sau khi tạo</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('admin.manage_users') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-user-plus"></i> Tạo người dùng
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Validate form
+document.querySelector('form').addEventListener('submit', function(e) {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const fullName = document.getElementById('full_name').value;
+    
+    if (!username || !password || !fullName) {
+        e.preventDefault();
+        alert('Vui lòng điền đầy đủ thông tin bắt buộc.');
+        return;
+    }
+    
+    if (password.length < 6) {
+        e.preventDefault();
+        alert('Mật khẩu phải có ít nhất 6 ký tự.');
+        return;
+    }
+    
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        e.preventDefault();
+        alert('Tên đăng nhập chỉ được chứa chữ cái, số và dấu gạch dưới.');
+        return;
+    }
+});
+</script>
+{% endblock %}

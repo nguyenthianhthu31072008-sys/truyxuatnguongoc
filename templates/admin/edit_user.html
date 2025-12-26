@@ -1,0 +1,108 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Chỉnh sửa người dùng{% endblock %}
+{% block page_title %}Chỉnh sửa người dùng: {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-user-edit"></i> Thông tin người dùng
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="username" 
+                                   value="{{ user.username }}" disabled>
+                            <div class="form-text">Không thể thay đổi tên đăng nhập</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="full_name" class="form-label">Họ và tên *</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" 
+                                   value="{{ user.full_name }}" required maxlength="100">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="new_password" class="form-label">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="new_password" name="new_password" 
+                                   minlength="6">
+                            <div class="form-text">Để trống nếu không muốn thay đổi mật khẩu</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="role" class="form-label">Vai trò</label>
+                            <select class="form-select" id="role" name="role" 
+                                    {% if user.username == session.user %}disabled{% endif %}>
+                                <option value="user" {% if user.get('role') != 'admin' %}selected{% endif %}>
+                                    User thường
+                                </option>
+                                <option value="admin" {% if user.get('role') == 'admin' %}selected{% endif %}>
+                                    Admin
+                                </option>
+                            </select>
+                            {% if user.username == session.user %}
+                                <div class="form-text text-warning">
+                                    Không thể thay đổi vai trò của chính mình
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ngày tạo</label>
+                            <input type="text" class="form-control" 
+                                   value="{{ user.get('created_at', 'N/A') }}" disabled>
+                        </div>
+                    </div>
+
+                    {% if user.get('role') == 'admin' and user.username != session.user %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Cảnh báo:</strong> Bạn đang chỉnh sửa tài khoản Admin khác. 
+                            Hãy cẩn thận khi thay đổi thông tin.
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('admin.manage_users') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Lưu thay đổi
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Validate form
+document.querySelector('form').addEventListener('submit', function(e) {
+    const fullName = document.getElementById('full_name').value;
+    const newPassword = document.getElementById('new_password').value;
+    
+    if (!fullName.trim()) {
+        e.preventDefault();
+        alert('Vui lòng nhập họ tên.');
+        return;
+    }
+    
+    if (newPassword && newPassword.length < 6) {
+        e.preventDefault();
+        alert('Mật khẩu mới phải có ít nhất 6 ký tự.');
+        return;
+    }
+});
+</script>
+{% endblock %}

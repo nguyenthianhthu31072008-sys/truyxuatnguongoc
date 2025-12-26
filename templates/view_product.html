@@ -50,108 +50,144 @@
                                 <div class="info-label">🏠 Hộ sản xuất</div>
                                 <div class="info-value">{{ product.farmer_name }}</div>
                             </div>
+
                             <div class="info-item">
                                 <div class="info-label">📍 Khu vực sản xuất</div>
                                 <div class="info-value">{{ product.production_area or 'Chưa cập nhật' }}</div>
                             </div>
-                            <div class="info-item">
-                                <div class="info-label">🌱 Loại cây trồng</div>
-                                <div class="info-value">{{ 'Cây thời vụ' if product.plant_type == 'seasonal' else 'Cây lâu năm' }}</div>
+
+                            <div class="info-item" style="margin-bottom: 1rem;">
+                                <div class="info-label">🌿 Loại cây trồng</div>
+                                <div class="info-value">
+                                    {% if product.plant_type == 'perennial' %}
+                                        <span class="plant-type-badge perennial">🌳 Cây lâu năm</span>
+                                    {% else %}
+                                        <span class="plant-type-badge seasonal">🌾 Cây thời vụ</span>
+                                    {% endif %}
+                                </div>
                             </div>
-                            {% if product.planting_date %}
+
+                            <div class="info-row">
+                                <div class="info-item">
+                                    <div class="info-label">{{ '🌸 Ngày ra hoa' if product.plant_type == 'perennial' else '🌱 Ngày trồng' }}</div>
+                                    <div class="info-value">{{ product.planting_date or 'Chưa cập nhật' }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <div class="info-label">✂️ Ngày thu hoạch</div>
+                                    <div class="info-value">{{ product.harvest_date or 'Chưa cập nhật' }}</div>
+                                </div>
+                            </div>
+
+                            {% if product.production_process %}
                             <div class="info-item">
-                                <div class="info-label">📅 Ngày gieo trồng</div>
-                                <div class="info-value">{{ product.planting_date }}</div>
+                                <div class="info-label">📝 Quy trình sản xuất</div>
+                                <div class="info-value info-text">{{ product.production_process }}</div>
                             </div>
                             {% endif %}
-                            {% if product.harvest_date %}
+
+                            {% if product.production_media %}
                             <div class="info-item">
-                                <div class="info-label">🌾 Ngày thu hoạch</div>
-                                <div class="info-value">{{ product.harvest_date }}</div>
+                                <div class="info-label">📸 Video/Hình ảnh quá trình sản xuất</div>
+                                <div class="media-gallery">
+                                    {% for media in product.production_media %}
+                                        <div class="media-item">
+                                            {% if media.endswith(('.mp4', '.mov', '.avi', '.mkv', '.webm')) %}
+                                                <video controls class="media-content">
+                                                    <source src="{{ url_for('static', filename=media) }}" type="video/mp4">
+                                                    Trình duyệt của bạn không hỗ trợ video.
+                                                </video>
+                                            {% else %}
+                                                <img src="{{ url_for('static', filename=media) }}" alt="Quá trình sản xuất" class="media-content">
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                             {% endif %}
+
+                            {% if product.harvest_process %}
+                            <div class="info-item">
+                                <div class="info-label">🌾 Quá trình thu hoạch</div>
+                                <div class="info-value info-text">{{ product.harvest_process }}</div>
+                            </div>
+                            {% endif %}
+
+                            {% if product.harvest_media %}
+                            <div class="info-item">
+                                <div class="info-label">📸 Video/Hình ảnh quá trình thu hoạch</div>
+                                <div class="media-gallery">
+                                    {% for media in product.harvest_media %}
+                                        <div class="media-item">
+                                            {% if media.endswith(('.mp4', '.mov', '.avi', '.mkv', '.webm')) %}
+                                                <video controls class="media-content">
+                                                    <source src="{{ url_for('static', filename=media) }}" type="video/mp4">
+                                                    Trình duyệt của bạn không hỗ trợ video.
+                                                </video>
+                                            {% else %}
+                                                <img src="{{ url_for('static', filename=media) }}" alt="Quá trình thu hoạch" class="media-content">
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if product.storage_method %}
+                            <div class="info-item">
+                                <div class="info-label">📦 Cách bảo quản</div>
+                                <div class="info-value info-text">{{ product.storage_method }}</div>
+                            </div>
+                            {% endif %}
+
                             <div class="info-item">
                                 <div class="info-label">📅 Ngày tạo</div>
-                                <div class="info-value">{{ product.created_at or 'N/A' }}</div>
+                                <div class="info-value">{{ product.created_at }}</div>
                             </div>
+
+                            {% if product.updated_at %}
                             <div class="info-item">
-                                <div class="info-label">👁️ Lượt quét QR</div>
-                                <div class="info-value">{{ product.scan_count or 0 }}</div>
+                                <div class="info-label">🔄 Cập nhật lần cuối</div>
+                                <div class="info-value">{{ product.updated_at }}</div>
                             </div>
-                        </div>
+                            {% endif %}
 
-                        {% if product.production_process %}
-                        <div class="process-section">
-                            <h3>🔄 Quy trình sản xuất</h3>
-                            <div class="process-content">{{ product.production_process }}</div>
-                        </div>
-                        {% endif %}
-
-                        {% if product.harvest_process %}
-                        <div class="process-section">
-                            <h3>🌾 Quy trình thu hoạch</h3>
-                            <div class="process-content">{{ product.harvest_process }}</div>
-                        </div>
-                        {% endif %}
-
-                        {% if product.storage_method %}
-                        <div class="process-section">
-                            <h3>📦 Phương pháp bảo quản</h3>
-                            <div class="process-content">{{ product.storage_method }}</div>
-                        </div>
-                        {% endif %}
-
-                        {% if product.production_media %}
-                        <div class="media-section">
-                            <h3>📸 Media quá trình sản xuất</h3>
-                            <div class="media-grid">
-                                {% for media in product.production_media %}
-                                <div class="media-item">
-                                    {% if media.endswith(('.mp4', '.mov', '.avi', '.mkv', '.webm')) %}
-                                        <video controls>
-                                            <source src="{{ url_for('static', filename=media) }}" type="video/mp4">
-                                        </video>
+                            <div class="info-item" style="background: linear-gradient(135deg, rgba(46, 125, 50, 0.1) 0%, rgba(76, 175, 80, 0.1) 100%); border-left: 4px solid var(--primary-color); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                                <div class="info-label">📊 Thống kê truy cập</div>
+                                <div class="info-value">
+                                    <p style="margin: 0.5rem 0; font-size: 1.1rem;">
+                                        <strong>👁️ Số lượt quét QR:</strong> 
+                                        <span style="color: var(--primary-color); font-size: 1.5rem; font-weight: 700; margin-left: 0.5rem;">{{ product.scan_count if product.scan_count else 0 }}</span>
+                                    </p>
+                                    {% if product.last_scan %}
+                                    <p style="margin: 0.5rem 0; color: var(--text-dark);">
+                                        <strong>🕐 Lần quét cuối:</strong> {{ product.last_scan }}
+                                    </p>
                                     {% else %}
-                                        <img src="{{ url_for('static', filename=media) }}" alt="Quá trình sản xuất">
+                                    <p style="margin: 0.5rem 0; color: var(--text-light); font-style: italic;">Chưa có lượt quét nào</p>
                                     {% endif %}
                                 </div>
-                                {% endfor %}
                             </div>
                         </div>
-                        {% endif %}
-
-                        {% if product.harvest_media %}
-                        <div class="media-section">
-                            <h3>🌾 Media quá trình thu hoạch</h3>
-                            <div class="media-grid">
-                                {% for media in product.harvest_media %}
-                                <div class="media-item">
-                                    {% if media.endswith(('.mp4', '.mov', '.avi', '.mkv', '.webm')) %}
-                                        <video controls>
-                                            <source src="{{ url_for('static', filename=media) }}" type="video/mp4">
-                                        </video>
-                                    {% else %}
-                                        <img src="{{ url_for('static', filename=media) }}" alt="Quá trình thu hoạch">
-                                    {% endif %}
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
 
                         <div class="qr-section">
                             <h3>📱 Mã QR truy xuất</h3>
                             <div class="qr-container">
-                                <img src="{{ url_for('static', filename=product.qr_code) }}" alt="QR Code" class="qr-image">
-                                <div class="qr-info">
-                                    <p>Quét mã QR để xem thông tin sản phẩm</p>
+                                <img 
+                                    src="{{ url_for('static', filename=product.qr_code) }}" 
+                                    alt="QR Code sản phẩm" 
+                                    class="qr-image"
+                                    id="qr-image"
+                                >
+                                <p class="qr-note">Quét mã QR này để xem thông tin sản phẩm</p>
+                                <div style="margin-top: 1rem; display: flex; justify-content: center;">
                                     <a 
                                         href="{{ url_for('static', filename=product.qr_code) }}" 
                                         download="{{ product.product_name|replace(' ', '_') }}_QR_{{ product.id }}.png"
                                         class="btn btn-primary btn-small"
                                         style="text-decoration: none;"
                                     >
-                                        💾 Tải xuống QR
+                                        ⬇️ Tải QR Code
                                     </a>
                                 </div>
                             </div>
@@ -182,3 +218,4 @@
     </div>
 </body>
 </html>
+

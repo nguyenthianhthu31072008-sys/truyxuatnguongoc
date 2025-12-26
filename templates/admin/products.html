@@ -1,0 +1,133 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Quản lý Sản phẩm{% endblock %}
+{% block page_title %}Quản lý Sản phẩm{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <p class="text-muted mb-0">Quản lý tất cả sản phẩm trong hệ thống</p>
+    </div>
+    <a href="{{ url_for('products.create') }}" class="btn btn-success">
+        <i class="fas fa-plus"></i> Tạo sản phẩm mới
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if products %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Loại</th>
+                            <th>Nguồn gốc</th>
+                            <th>Ngày tạo</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>
+                                <code>{{ product.id[:8] }}...</code>
+                            </td>
+                            <td>
+                                <strong>{{ product.name }}</strong>
+                                {% if product.get('organic') %}
+                                    <span class="badge bg-success ms-2">Hữu cơ</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">{{ product.type }}</span>
+                            </td>
+                            <td>{{ product.origin }}</td>
+                            <td>{{ product.get('created_at', 'N/A') }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('main.view_product', product_id=product.id) }}" 
+                                       class="btn btn-sm btn-outline-info" target="_blank" 
+                                       title="Xem sản phẩm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ url_for('products.edit', product_id=product.id) }}" 
+                                       class="btn btn-sm btn-outline-primary" title="Chỉnh sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" 
+                                            onclick="confirmDelete('{{ product.id }}', '{{ product.name }}')"
+                                            title="Xóa sản phẩm">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination info -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="text-muted">
+                    Tổng cộng: {{ products|length }} sản phẩm
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-box fa-3x mb-3"></i>
+                <h5>Chưa có sản phẩm nào</h5>
+                <p>Hãy tạo sản phẩm đầu tiên</p>
+                <a href="{{ url_for('products.create') }}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Tạo sản phẩm
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa sản phẩm <strong id="deleteProductName"></strong>?</p>
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Cảnh báo:</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>Tất cả dữ liệu sản phẩm sẽ bị xóa vĩnh viễn</li>
+                        <li>Mã QR code sẽ bị xóa</li>
+                        <li>Tất cả hình ảnh và video sẽ bị xóa</li>
+                        <li>Hành động này không thể hoàn tác!</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Xóa vĩnh viễn
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function confirmDelete(productId, productName) {
+    document.getElementById('deleteProductName').textContent = productName;
+    document.getElementById('deleteForm').action = '/admin/products/' + productId + '/delete';
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
+{% endblock %}

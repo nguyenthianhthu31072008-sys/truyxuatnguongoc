@@ -27,8 +27,6 @@ utils.load_data()
 utils.load_users()
 
 if __name__ == '__main__':
-    # Railway sẽ set PORT environment variable
-    port = int(os.environ.get('PORT', 5000))
-    # Chỉ chạy debug mode khi không phải production
-    debug_mode = not config.IS_PRODUCTION
-    app.run(debug=debug_mode, host='0.0.0.0', port=port)
+    # Chỉ chạy debug mode khi chạy local
+    debug_mode = os.environ.get('FLASK_ENV') != 'production'
+    app.run(debug=debug_mode, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))

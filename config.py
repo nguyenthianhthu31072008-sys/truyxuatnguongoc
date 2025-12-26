@@ -12,20 +12,10 @@ UPLOAD_DIR = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'mov', 'avi', 'mkv', 'webm'}
 MAX_FILE_SIZE = 100 * 1024 * 1024  # 100MB
 
-# Secret key - Railway sẽ tự động generate
-SECRET_KEY = os.environ.get('SECRET_KEY', '0deab411eb2ed51a3a625a05ce9602c521d54ad4c3ceab1d3af2d35978b9ca15')
-
-# Railway environment detection
-RAILWAY_ENVIRONMENT = os.environ.get('RAILWAY_ENVIRONMENT_NAME')
-IS_PRODUCTION = RAILWAY_ENVIRONMENT == 'production'
+# Secret key - Nên đặt trong biến môi trường cho production
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-key-change-in-production-0deab411eb2ed51a3a625a05ce9602c521d54ad4c3ceab1d3af2d35978b9ca15')
 
 # CSRF Protection
 WTF_CSRF_ENABLED = True
 WTF_CSRF_TIME_LIMIT = 3600  # 1 giờ
-
-# OpenAI Configuration
-OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-OPENAI_MODEL = os.environ.get('OPENAI_MODEL', 'gpt-3.5-turbo')
-OPENAI_MAX_TOKENS = int(os.environ.get('OPENAI_MAX_TOKENS', '1500'))
-OPENAI_TEMPERATURE = float(os.environ.get('OPENAI_TEMPERATURE', '0.7'))
 
