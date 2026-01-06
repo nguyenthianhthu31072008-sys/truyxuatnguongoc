@@ -18,4 +18,6 @@ def get_openai_client():
 
 def is_openai_available():
     """Kiểm tra xem OpenAI API có sẵn không"""
-    return get_openai_client() is not None
+    # Tạm thời tắt OpenAI do vấn đề quota
+    return False
+    # Bật lại khi đã fix quota: return get_openai_client() is not None

@@ -149,15 +149,23 @@
         </div>
         {% elif analysis.get('openai_error') %}
         <div class="ai-unavailable">
-            <h5><i class="fas fa-exclamation-triangle"></i> Lỗi AI Analysis</h5>
-            <p>Không thể kết nối với OpenAI: {{ analysis.openai_error }}</p>
-            <p>Hiển thị phân tích cơ bản thay thế.</p>
+            <h5><i class="fas fa-exclamation-triangle"></i> Tính năng AI tạm thời không khả dụng</h5>
+            <p><strong>Lý do:</strong> Đang cập nhật hệ thống AI hoặc vượt quá giới hạn sử dụng.</p>
+            <p><strong>Giải pháp:</strong> Hiển thị phân tích cơ bản thay thế. Vui lòng thử lại sau.</p>
+            <div class="alert alert-info mt-3">
+                <i class="fas fa-info-circle"></i>
+                <strong>Thông tin:</strong> Tính năng AI Analysis sẽ hoạt động trở lại sau khi được cập nhật.
+            </div>
         </div>
         {% else %}
         <div class="ai-unavailable">
-            <h5><i class="fas fa-info-circle"></i> AI Analysis không khả dụng</h5>
-            <p>Cần cấu hình OPENAI_API_KEY để sử dụng tính năng phân tích AI nâng cao.</p>
-            <p>Hiển thị phân tích cơ bản thay thế.</p>
+            <h5><i class="fas fa-info-circle"></i> Tính năng AI Analysis tạm thời không khả dụng</h5>
+            <p><strong>Trạng thái:</strong> Đang bảo trì hoặc cập nhật hệ thống AI.</p>
+            <p><strong>Thay thế:</strong> Hiển thị phân tích cơ bản dựa trên thuật toán nội bộ.</p>
+            <div class="alert alert-success mt-3">
+                <i class="fas fa-lightbulb"></i>
+                <strong>Gợi ý:</strong> Bạn vẫn có thể sử dụng tính năng "AI Report cơ bản" để có phân tích sản phẩm.
+            </div>
         </div>
         {% endif %}
 
