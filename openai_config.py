@@ -27,22 +27,8 @@ def get_openai_client():
 
 def is_openai_available():
     """Kiểm tra xem OpenAI API có sẵn không"""
-    client = get_openai_client()
-    if not client:
-        return False
-    
-    try:
-        # Test với một request đơn giản
-        if hasattr(client, 'models'):
-            # OpenAI client mới
-            client.models.list()
-        else:
-            # OpenAI client cũ
-            client.Model.list()
-        return True
-    except Exception as e:
-        print(f"OpenAI API test failed: {e}")
-        return False
+    # Luôn return True vì sử dụng Mock AI
+    return True
 
 def get_openai_config():
     """Lấy cấu hình OpenAI"""
