@@ -35,15 +35,15 @@
                                 <code>{{ product.id[:8] }}...</code>
                             </td>
                             <td>
-                                <strong>{{ product.name }}</strong>
+                                <strong>{{ product.get('product_name', 'N/A') }}</strong>
                                 {% if product.get('organic') %}
                                     <span class="badge bg-success ms-2">Hữu cơ</span>
                                 {% endif %}
                             </td>
                             <td>
-                                <span class="badge bg-secondary">{{ product.type }}</span>
+                                <span class="badge bg-secondary">{{ product.get('plant_type', 'N/A') }}</span>
                             </td>
-                            <td>{{ product.origin }}</td>
+                            <td>{{ product.get('production_area', 'N/A') }}</td>
                             <td>{{ product.get('created_at', 'N/A') }}</td>
                             <td>
                                 <div class="btn-group" role="group">
