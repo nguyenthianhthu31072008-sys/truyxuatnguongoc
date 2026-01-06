@@ -141,7 +141,7 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <span class="badge bg-secondary">{{ product.type }}</span>
+                                        <span class="badge bg-secondary">{{ product.get('plant_type', 'N/A') }}</span>
                                     </td>
                                     <td>
                                         <small class="text-muted">{{ product.get('created_at', 'N/A') }}</small>

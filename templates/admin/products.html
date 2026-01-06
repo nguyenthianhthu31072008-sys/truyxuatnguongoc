@@ -52,12 +52,12 @@
                                        title="Xem sản phẩm">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ url_for('products.edit', product_id=product.id) }}" 
+                                    <a href="{{ url_for('products.edit_product', product_id=product.id) }}" 
                                        class="btn btn-sm btn-outline-primary" title="Chỉnh sửa">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button type="button" class="btn btn-sm btn-outline-danger" 
-                                            onclick="confirmDelete('{{ product.id }}', '{{ product.name }}')"
+                                            onclick="confirmDelete('{{ product.id }}', '{{ product.get('product_name', 'N/A') }}')"
                                             title="Xóa sản phẩm">
                                         <i class="fas fa-trash"></i>
                                     </button>
