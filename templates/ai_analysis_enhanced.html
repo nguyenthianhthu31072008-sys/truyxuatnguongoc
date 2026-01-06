@@ -121,16 +121,34 @@
             <div class="col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <div class="display-4 text-success">{{ analysis.standards_compliance.compliance_score }}</div>
+                        <div class="display-4 text-success">
+                            {% if analysis.standards_compliance %}
+                                {{ (analysis.standards_compliance | selectattr('status', 'equalto', 'complete') | list | length / analysis.standards_compliance | length * 100) | round }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </div>
                         <h5>Tuân thủ tiêu chuẩn</h5>
-                        <p class="text-muted">{{ analysis.standards_compliance.compliance_level }}</p>
+                        <p class="text-muted">
+                            {% if analysis.standards_compliance %}
+                                {{ (analysis.standards_compliance | selectattr('status', 'equalto', 'complete') | list | length) }}/{{ analysis.standards_compliance | length }} hoàn thành
+                            {% else %}
+                                Chưa đánh giá
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <div class="display-4 text-info">{{ analysis.stats.production_media_count + analysis.stats.harvest_media_count }}</div>
+                        <div class="display-4 text-info">
+                            {% if analysis.production_media or analysis.harvest_media %}
+                                {{ (analysis.production_media | length) + (analysis.harvest_media | length) }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </div>
                         <h5>Media files</h5>
                         <p class="text-muted">Hình ảnh & Video</p>
                     </div>
