@@ -172,35 +172,24 @@
         <!-- Gợi ý tiêu chuẩn số hóa -->
         <div class="ai-section">
             <h3><i class="fas fa-clipboard-check"></i> Tiêu chuẩn số hóa</h3>
-            {% if standards_suggestions.available %}
+            {% if standards_suggestions.available and standards_suggestions.suggestions %}
                 <div class="ai-content">
-                    {% if standards_suggestions.suggestions.mandatory_standards %}
-                        <h5>Tiêu chuẩn bắt buộc:</h5>
-                        {% for standard in standards_suggestions.suggestions.mandatory_standards %}
-                        <div class="standards-item {{ standard.status }}">
-                            <h6>{{ standard.name }}</h6>
-                            <p>{{ standard.description }}</p>
-                            <span class="badge bg-{{ 'success' if standard.status == 'complete' else 'warning' if standard.status == 'partial' else 'danger' }}">
-                                {{ 'Hoàn thành' if standard.status == 'complete' else 'Một phần' if standard.status == 'partial' else 'Thiếu' }}
-                            </span>
+                    {% for standard in standards_suggestions.suggestions %}
+                        <div class="standards-item {% if standard.status == 'complete' %}{% elif standard.status == 'partial' %}partial{% else %}missing{% endif %} mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">
+                                        <i class="fas fa-{% if standard.status == 'complete' %}check-circle text-success{% elif standard.status == 'partial' %}exclamation-circle text-warning{% else %}times-circle text-danger{% endif %} me-2"></i>
+                                        {{ standard.name }}
+                                    </h6>
+                                    <p class="mb-0 text-muted">{{ standard.description }}</p>
+                                </div>
+                                <span class="badge bg-{% if standard.status == 'complete' %}success{% elif standard.status == 'partial' %}warning{% else %}danger{% endif %}">
+                                    {% if standard.status == 'complete' %}Hoàn thành{% elif standard.status == 'partial' %}Một phần{% else %}Thiếu{% endif %}
+                                </span>
+                            </div>
                         </div>
-                        {% endfor %}
-                    {% endif %}
-
-                    {% if standards_suggestions.suggestions.advanced_standards %}
-                        <h5 class="mt-4">Tiêu chuẩn nâng cao:</h5>
-                        {% for standard in standards_suggestions.suggestions.advanced_standards %}
-                        <div class="standards-item">
-                            <h6>{{ standard.name }}</h6>
-                            <p>{{ standard.description }}</p>
-                            <small class="text-muted"><strong>Lợi ích:</strong> {{ standard.benefit }}</small>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-
-                    {% if standards_suggestions.suggestions.raw_response %}
-                        {{ standards_suggestions.suggestions.raw_response | replace('\n', '<br>') | safe }}
-                    {% endif %}
+                    {% endfor %}
                 </div>
             {% else %}
                 <div class="ai-content">
@@ -212,9 +201,54 @@
         <!-- Phân tích thị trường -->
         <div class="ai-section">
             <h3><i class="fas fa-chart-line"></i> Phân tích thị trường</h3>
-            {% if market_analysis.available %}
+            {% if market_analysis.available and market_analysis.analysis %}
                 <div class="ai-content">
-                    {{ market_analysis.analysis | replace('\n', '<br>') | safe }}
+                    {% set market = market_analysis.analysis %}
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-bullseye"></i> Tiềm năng thị trường</h6>
+                            <span class="badge bg-success fs-6">{{ market.market_potential }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-dollar-sign"></i> Mức giá</h6>
+                            <span class="badge bg-info fs-6">{{ market.price_range }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6><i class="fas fa-users"></i> Đối tượng khách hàng</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for customer in market.target_customers %}
+                                <span class="badge bg-primary">{{ customer }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6><i class="fas fa-store"></i> Kênh phân phối</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for channel in market.distribution_channels %}
+                                <span class="badge bg-secondary">{{ channel }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6><i class="fas fa-star"></i> Lợi thế cạnh tranh</h6>
+                        <p class="text-success fw-bold">{{ market.competitive_advantage }}</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6><i class="fas fa-lightbulb"></i> Gợi ý Marketing</h6>
+                        <ul class="list-group list-group-flush">
+                            {% for suggestion in market.marketing_suggestions %}
+                                <li class="list-group-item border-0 px-0">
+                                    <i class="fas fa-check-circle text-success me-2"></i>{{ suggestion }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             {% else %}
                 <div class="ai-content">
@@ -232,9 +266,26 @@
         <!-- Kế hoạch cải thiện -->
         <div class="ai-section">
             <h3><i class="fas fa-tasks"></i> Kế hoạch cải thiện</h3>
-            {% if improvement_plan.available %}
+            {% if improvement_plan.available and improvement_plan.plan %}
                 <div class="ai-content">
-                    {{ improvement_plan.plan | replace('\n', '<br>') | safe }}
+                    {% for plan in improvement_plan.plan %}
+                        <div class="card mb-3 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="card-title mb-0">
+                                        <i class="fas fa-tasks me-2"></i>{{ plan.action }}
+                                    </h6>
+                                    <span class="badge bg-{% if plan.priority == 'Cao' %}danger{% elif plan.priority == 'Trung bình' %}warning{% else %}secondary{% endif %}">
+                                        {{ plan.priority }}
+                                    </span>
+                                </div>
+                                <p class="card-text text-muted mb-2">{{ plan.description }}</p>
+                                <small class="text-info">
+                                    <i class="fas fa-clock me-1"></i>Thời gian: {{ plan.timeline }}
+                                </small>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             {% else %}
                 <div class="ai-content">
